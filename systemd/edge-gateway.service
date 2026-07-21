@@ -1,0 +1,8 @@
+[Unit]
+Description=Brand new very cool service
+
+[Service]
+ExecStart=/home/edge/edge-gateway/edge-gateway
+
+[Install]
+WantedBy=multi-user.target
