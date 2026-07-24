@@ -34,13 +34,6 @@ int main(int argc, char **argv){
     signal(SIGINT, sig_handle);
     signal(SIGTERM, sig_handle);
 
-    char cwd[50]; 
-    if(getcwd(cwd, 50) == NULL){
-        perror("Klaida su getcwd");
-        return -1;
-    }
-    printf("cwd: %s\n", cwd);
-
     FILE *stream = fopen(config_file, "r");
     if(stream == NULL){
         perror("Nepavyko atidaryti failo ");
@@ -50,6 +43,7 @@ int main(int argc, char **argv){
     int ret;
 
     char name[50];
+    rewind(stream);
     ret = find_var(stream, "name", name, 50);
     if(ret == -1){
         printf("find_var grazino klaida(name).\n");
