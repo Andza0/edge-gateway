@@ -60,13 +60,18 @@ int main(int argc, char **argv){
 
     fclose(stream);
 
-    int interval = atoi(intervalc);
+    char *end;
+    long interval = strtol(intervalc, &end, 0);
+    if(end == intervalc){
+        printf("Blogai nurodytas intervalas, privalo buti sveikasis skaicius.\n");
+        return -1;
+    }
 
 
 
     while(running){
         printf("%s: ON\n", name);
-        sleep(interval);
+        sleep((int)interval);
         fflush(stdout);
     }
     
