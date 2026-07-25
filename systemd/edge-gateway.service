@@ -3,6 +3,7 @@ Description=Brand new very cool service
 
 [Service]
 ExecStart=/home/edge/edge-gateway/edge-gateway
+ExecReload=/bin/kill -HUP $MAINPID
 
 [Install]
 WantedBy=multi-user.target
