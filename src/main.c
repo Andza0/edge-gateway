@@ -3,6 +3,7 @@
 #include <signal.h>
 #include <getopt.h>
 #include "config.h"
+#include "data.h"
 
 int volatile running = 1;
 settings set;
@@ -42,7 +43,8 @@ int main(int argc, char **argv){
 
 
     while(running){
-        printf("%s: ON\n", set.name);
+        float temp = get_cpu_temp();
+        printf("%s: %.2f C*\n", set.name, temp);
         sleep(set.interval);
         fflush(stdout);
     }
