@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
-#include <stdlib.h>
 #include <getopt.h>
-#include "parse.h"
+#include "config.h"
 
 int volatile running = 1;
+settings set;
+char *config_file = "/etc/edge-gateway/config.conf";
 
 void sig_handle(int signal){
     running = 0;
 }
 
+void sig_config_reload(int signal){
+    read_config(config_file, &set);
+}
 
 int main(int argc, char **argv){
-
-    char *config_file = "/etc/edge-gateway/config.conf";
 
     int option;
     struct option long_options[] = {
@@ -33,49 +35,19 @@ int main(int argc, char **argv){
     }
     signal(SIGINT, sig_handle);
     signal(SIGTERM, sig_handle);
+    signal(SIGHUP, sig_config_reload);
 
-    FILE *stream = fopen(config_file, "r");
-    if(stream == NULL){
-        perror("Nepavyko atidaryti failo ");
-        return -1;
-    }
-    
-    int ret;
-
-    char name[50];
-    rewind(stream);
-    ret = find_var(stream, "name", name, 50);
-    if(ret == -1){
-        printf("find_var grazino klaida(name).\n");
-        return -1;
-    }
-
-    char intervalc[50];
-    rewind(stream);
-    ret = find_var(stream, "interval", intervalc, 50);
-    if(ret == -1){
-    printf("find_var grazino klaida(interval).\n");
-    return -1;
-    }
-
-    fclose(stream);
-
-    char *end;
-    long interval = strtol(intervalc, &end, 0);
-    if(end == intervalc){
-        printf("Blogai nurodytas intervalas, privalo buti sveikasis skaicius.\n");
-        return -1;
-    }
+    read_config(config_file, &set);
 
 
 
     while(running){
-        printf("%s: ON\n", name);
-        sleep((int)interval);
+        printf("%s: ON\n", set.name);
+        sleep(set.interval);
         fflush(stdout);
     }
     
-    printf("\n%s: OFF\n", name);
+    printf("\n%s: OFF\n", set.name);
 
     return 0;
 }
