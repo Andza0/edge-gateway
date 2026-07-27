@@ -34,6 +34,7 @@ int main(int argc, char **argv){
         }
         
     }
+    
     signal(SIGINT, sig_handle);
     signal(SIGTERM, sig_handle);
     signal(SIGHUP, sig_config_reload);
