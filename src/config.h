@@ -8,7 +8,7 @@ typedef struct {
 } general_settings;
 
 typedef struct {
-    char localhost[50];
+    char host[50];
     int port;
     char topic[100];
 } mqtt_settings;

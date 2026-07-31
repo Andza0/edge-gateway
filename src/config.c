@@ -61,9 +61,9 @@ int read_mqtt_settings(FILE *stream, mqtt_settings *settings){
     int ret;
 
     rewind(stream);
-    ret = find_var(stream, "mqtt_host", settings->localhost, 50);
+    ret = find_var(stream, "mqtt_host", settings->host, 50);
     if(ret == -1){
-        printf("Nepavyko nuskaityti localhost\n");
+        printf("Nepavyko nuskaityti host\n");
     }
 
     rewind(stream);

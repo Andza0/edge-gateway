@@ -57,13 +57,18 @@ int main(int argc, char **argv){
         return -1;
     }
 
+    mqtt_client_connect(mosq, set.mqtt_settings);
+
     while(running){
         float temp = get_cpu_temp();
-        printf("%s: %.2f C*\n", set.general_settings.name, temp);
+        char payload[50];
+        snprintf(payload, 50, "CPU temp: %.2f°C\n", temp);
+        mqtt_publish_temperature(mosq, set.mqtt_settings, payload);
         sleep(set.general_settings.interval);
         fflush(stdout);
     }
     
+    mqtt_client_cleanup();
     printf("\n%s: OFF\n", set.general_settings.name);
 
     return 0;
